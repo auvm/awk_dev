@@ -1,0 +1,11 @@
+Ángel 50 180
+Juan 25 40
+María 30 35
+Carlos 28 45
+Ana 32 38
+Luis 27 42
+Sofía 29 36
+Miguel 26 44
+Laura 31 39
+Miguel 24 0
+Daniel 34 0
