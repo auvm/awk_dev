@@ -1,0 +1,4 @@
+#prints in reverse order N-number of lines from a file 
+BEGIN	{NUM = ARGV[1];	ARGV[1]=ARGV[2]; ARGC--}
+	{line[NR] = $0}
+END	{for(i = NR; i > NR - NUM; i--) print line[i]}
