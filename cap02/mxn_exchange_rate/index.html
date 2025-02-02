@@ -1,0 +1,709 @@
+<html>
+  <head>
+    <meta name="robots" content="index, nofollow" />
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script src="/tipcamb/js/bootstrap.min.js"></script>
+    <script src="/tipcamb/js/datepicker_Bootstrap4.js"></script>
+    <script src="/tipcamb/js/bootstrap-datepicker.es.js"></script>
+    <script type="text/javascript">
+      var fechaActual = {};
+      fechaActual["SF43718"] = "";
+      fechaActual["SF343410"] = "";
+      fechaDivisas = "";
+      function consultaSeries(fecha, fechaOut, idSerie, decimales) {
+        $("#aviso" + idSerie).show();
+        var series = [idSerie];
+        fechaActual[idSerie] = fecha;
+        var url =
+          "datosieajax?accion=dato&idSeries=" +
+          idSerie +
+          "&decimales=" +
+          decimales +
+          "&fecha=" +
+          fecha;
+        for (var indexSerie = 0; indexSerie < series.length; indexSerie++) {
+          var idSerie = series[indexSerie];
+          $("#td" + idSerie).html("");
+        }
+        $.ajax({
+          url: url,
+          success: function (data) {
+            if (data.header.exito) {
+              var seriesData = data.body;
+              for (
+                var indexSerie = 0;
+                indexSerie < series.length;
+                indexSerie++
+              ) {
+                var idSerie = series[indexSerie];
+                var dataSerie = seriesData[indexSerie];
+                $("#fecha" + idSerie).text(fechaOut);
+                $("#td" + idSerie).html(dataSerie.mensaje);
+                $("#aviso" + idSerie).hide();
+              }
+            }
+          },
+          dataType: "json",
+        });
+      }
+      function consultaSeriesDiv(fecha, fechaOut) {
+        $(".avisoDivisas").show();
+        var series = ["SF46410", "SF46406", "SF60632"];
+        var url =
+          "datosieajax?accion=dato&idSeries=SF46410,SF46406,SF60632&decimales=4,4,4&fecha=" +
+          fecha;
+        for (var indexSerie = 0; indexSerie < series.length; indexSerie++) {
+          var idSerie = series[indexSerie];
+          $("#td" + idSerie).html("");
+        }
+        $.ajax({
+          url: url,
+          success: function (data) {
+            if (data.header.exito) {
+              var seriesData = data.body;
+              $("#fechaDivisas").text(fechaOut);
+              for (
+                var indexSerie = 0;
+                indexSerie < series.length;
+                indexSerie++
+              ) {
+                var idSerie = series[indexSerie];
+                var dataSerie = seriesData[indexSerie];
+                $("#dato" + idSerie).html(dataSerie.mensaje);
+              }
+              $(".avisoDivisas").hide();
+            }
+          },
+          dataType: "json",
+        });
+      }
+      function eventoCal(e, obj) {
+        var fecha = e.format("dd/mm/yyyy");
+
+        var fechaOut = e.format("dd/mm/yyyy");
+        var idSerie = $(obj).data("idserie");
+        var decimales = $(obj).data("decimales");
+        if (fechaActual[idSerie] != fecha)
+          consultaSeries(fecha, fechaOut, idSerie, decimales);
+      }
+      $(function () {
+        $(".calBottom")
+          .datepicker({
+            autoclose: true,
+            language: "es",
+          })
+          .on("hide", function (e) {
+            eventoCal(e, this);
+          });
+        $(".calTop")
+          .datepicker({
+            autoclose: true,
+            language: "es",
+          })
+          .on("hide", function (e) {
+            eventoCal(e, this);
+          });
+        $(".calDivisas")
+          .datepicker({
+            autoclose: true,
+            language: "es",
+          })
+          .on("hide", function (e) {
+            var fecha = e.format("dd/mm/yyyy");
+
+            var fechaOut = e.format("dd/mm/yyyy");
+            if (fechaDivisas != fecha) consultaSeriesDiv(fecha, fechaOut);
+          });
+      });
+      function abreLiga(url) {
+        var cont = $("#contenedor");
+        if (typeof cont != "undefined" && cont.length > 0) {
+          load("/tipcamb/", url);
+        } else {
+          window.open(url, "_self");
+        }
+        return false;
+      }
+    </script>
+    <link type="text/css" rel="stylesheet" href="css/borders.css" />
+    <link type="text/css" rel="stylesheet" href="css/TiposCambios.css" />
+
+    <link rel="stylesheet" href="/tipcamb/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/tipcamb/css/all.min.css" />
+    <link rel="stylesheet" href="/tipcamb/css/datepicker_Bootstrap4.css" />
+    <link rel="stylesheet" href="/tipcamb/css/tipcamb.css" />
+    <title>SIE - Mercado cambiario</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+    <form
+      name="tiposCambioActionForm"
+      method="post"
+      action="/tipcamb/tiposCambioAction.do"
+    >
+      <input type="hidden" name="idioma" value="sp" />
+
+      <div style="display: none">
+        <img src="images/border9.png" />
+        <img src="images/border1.png" />
+        <img src="images/border2.png" />
+        <img src="images/border3.png" />
+        <img src="images/border4.png" />
+        <img src="images/border6.png" />
+        <img src="images/border7.png" />
+        <img src="images/border8.png" />
+      </div>
+      <table border="0" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td width="50%" valign="top">
+            <table border="0" width="100%" cellspacing="0">
+              <tr>
+                <td height="38" align="center" class="titulo">
+                  Tipos de Cambio Peso/D&oacute;lar
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table
+                    border="0"
+                    cellpadding="0"
+                    cellspacing="0"
+                    width="100%"
+                    class=""
+                  >
+                    <tr>
+                      <td class="b4"></td>
+                      <td class="b5">
+                        <table border="0" width="100%" cellspacing="0">
+                          <tr>
+                            <td
+                              colspan="3"
+                              class="titulos_tablaSF"
+                              align="center"
+                            >
+                              Tipo de cambio para solventar obligaciones
+                              denominadas en d&oacute;lares de los EE.UU.A.,
+                              pagaderas en la Rep&uacute;blica Mexicana
+                              <span>
+                                <sup><b>1/</b></sup>
+                              </span>
+                            </td>
+                          </tr>
+                          <tr class="titulos_simpletablaSF" align="center">
+                            <td width="33%">Fecha</td>
+                            <td width="33%">
+                              <table border="0" align="center" cellspacing="0">
+                                <tr class="titulos_simpletablaSF">
+                                  <td width="12px">&nbsp;</td>
+                                  <td>FIX</td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr align="center">
+                            <td class="renglonPar">
+                              <table
+                                border="0"
+                                cellspacing="0"
+                                class="renglonPar"
+                              >
+                                <tr>
+                                  <td
+                                    align="right"
+                                    style="
+                                      padding-top: 5px;
+                                      padding-bottom: 5px;
+                                    "
+                                  >
+                                    <div id="fechaSF43718" class="renglonPar">
+                                      31/01/2025
+                                    </div>
+                                  </td>
+                                  <td>&nbsp</td>
+                                  <td
+                                    align="center"
+                                    onmouseover="hl_show2(event,'return cd_creaHint(\'Selecci&oacute;n de fecha para el concepto\',\'12/11/1991\',\'31/01/2025\',\'\',\'sp\');');"
+                                    width="18"
+                                    valign="middle"
+                                    style="
+                                      padding-top: 5px;
+                                      padding-bottom: 5px;
+                                    "
+                                  >
+                                    <span
+                                      style="color: #01404c; font-size: 14px"
+                                      id="CALENDARIO_FIX"
+                                      class="calBottom fas fa-calendar-alt"
+                                      data-idserie="SF43718"
+                                      data-decimales="4"
+                                    ></span>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td class="renglonPar">
+                              <table
+                                border="0"
+                                cellspacing="0"
+                                class="renglonPar"
+                              >
+                                <tr>
+                                  <td width="13px">
+                                    <img
+                                      width="10px"
+                                      height="10px"
+                                      id="avisoSF43718"
+                                      alt="Obteniendo datos..."
+                                      src="images/progress.gif"
+                                      style="display: none"
+                                    />
+                                  </td>
+                                  <td class="renglonPar">
+                                    <div id="tdSF43718">20.6068</div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td class="renglonPar">
+                              <a
+                                href="#"
+                                class="liga"
+                                onClick="return abreLiga('tipCamMIAction.do?idioma=sp');"
+                              >
+                                M&aacute;s informaci&oacute;n
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td class="b6"></td>
+                    </tr>
+                    <tr>
+                      <td class="b7"></td>
+                      <td class="b8"></td>
+                      <td class="b9"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table
+                    border="0"
+                    cellpadding="0"
+                    cellspacing="0"
+                    width="100%"
+                    class=""
+                  >
+                    <tr>
+                      <td class="b4"></td>
+                      <td class="b5">
+                        <table border="0" width="100%" cellspacing="0">
+                          <tr>
+                            <td colspan="3" align="center">&nbsp;</td>
+                          </tr>
+                          <tr>
+                            <td
+                              colspan="3"
+                              class="titulos_tablaSF"
+                              align="center"
+                            >
+                              Tipo de Cambio de Cierre de Jornada
+                              <span><sup>2/</sup></span>
+                            </td>
+                          </tr>
+                          <tr class="titulos_simpletablaSF" align="center">
+                            <td width="33%">Fecha</td>
+                            <td width="33%">
+                              <table border="0" align="center" cellspacing="0">
+                                <tr class="titulos_simpletablaSF">
+                                  <td width="13">&nbsp;</td>
+                                  <td>Nivel</td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <tr align="center" class="renglonPar">
+                            <td>
+                              <table border="0" cellspacing="0">
+                                <tr>
+                                  <td
+                                    align="right"
+                                    style="
+                                      padding-top: 5px;
+                                      padding-bottom: 5px;
+                                    "
+                                  >
+                                    <div id="fechaSF343410" class="renglonPar">
+                                      31/01/2025
+                                    </div>
+                                  </td>
+                                  <td>&nbsp</td>
+                                  <td
+                                    align="center"
+                                    onmouseover="hl_show2(event,'return cd_creaHint(\'Selecci&oacute;n de fecha para el concepto\',\'01/11/2021\',\'31/01/2025\',\'\',\'sp\');');"
+                                    width="18"
+                                  >
+                                    <span
+                                      style="color: #01404c"
+                                      id="CALENDARIO_INTER"
+                                      class="calBottom fas fa-calendar-alt"
+                                      data-idserie="SF343410"
+                                      data-decimales="4"
+                                    ></span>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td>
+                              <table border="0" cellspacing="0">
+                                <tr>
+                                  <td width="13">
+                                    <img
+                                      width="10"
+                                      height="10"
+                                      id="avisoSF343410"
+                                      alt="Obteniendo datos..."
+                                      src="images/progress.gif"
+                                      style="display: none"
+                                    />
+                                  </td>
+                                  <td class="renglonPar">
+                                    <div id="tdSF343410">20.6871</div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td>
+                              <a
+                                href="#"
+                                class="liga"
+                                onClick="return abreLiga('intMasInfAction.do?idioma=sp');"
+                              >
+                                M&aacute;s informaci&oacute;n
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                      <td class="b6"></td>
+                    </tr>
+                    <tr>
+                      <td class="b7"></td>
+                      <td class="b8"></td>
+                      <td class="b9"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td width="85%" valign="top">
+            <table border="0" width="100%" cellspacing="0">
+              <tr>
+                <td height="35" align="center" class="titulo">
+                  Tipos de cambio<br />respecto a otras divisas
+                  <span><sup>3/</sup></span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <table
+                    border="0"
+                    cellpadding="0"
+                    cellspacing="0"
+                    width="100%"
+                    class=""
+                  >
+                    <tr>
+                      <td width="5%" class="b4"></td>
+                      <td>
+                        <table border="0" width="94%" cellspacing="0">
+                          <tr>
+                            <td
+                              height="37"
+                              colspan="4"
+                              align="center"
+                              class="titulos_tablaSF"
+                              cellpadding="0"
+                            >
+                              Pesos por divisa
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              width="35%"
+                              class="renglonNon"
+                              style="padding-top: 5px; padding-bottom: 5px"
+                            >
+                              &nbsp;
+                            </td>
+                            <td
+                              width="25%"
+                              align="right"
+                              class="titulos_simpletablaSF"
+                            >
+                              <div
+                                id="fechaDivisas"
+                                class="titulos_simpletablaSF"
+                              >
+                                <div align="right"></div>
+                                31/01/2025
+                              </div>
+                            </td>
+                            <td width="31%" class="renglonNon">
+                              <span
+                                onmouseover="hl_show2(event,'return cd_creaHint(\'Selecci&oacute;n de fecha para el concepto\',\'16/10/1996\',\'31/01/2025\',\'\',\'sp\');');"
+                                >&nbsp;
+                                <span
+                                  style="color: #01404c; font-size: 14px"
+                                  id="CALENDARIO_DIVISAS"
+                                  class="calDivisas fas fa-calendar-alt"
+                                ></span>
+                              </span>
+                            </td>
+                            <td width="9%" align="left"></td>
+                          </tr>
+                          <tr>
+                            <td
+                              align="left"
+                              style="padding-top: 5px; padding-bottom: 5px"
+                              class="renglonPar"
+                            >
+                              <div align="center">Euro</div>
+                            </td>
+                            <td colspan="3" class="renglonPar">
+                              <table border="0" width="100%" cellspacing="0">
+                                <tr>
+                                  <td width="23" class="renglonPar">
+                                    <img
+                                      width="10px"
+                                      height="10px"
+                                      class="avisoDivisas"
+                                      id="EURO_AVISO"
+                                      alt="Obteniendo datos..."
+                                      src="images/progress.gif"
+                                      style="display: none"
+                                    />
+                                  </td>
+                                  <td
+                                    width="592"
+                                    align="right"
+                                    class="renglonPar"
+                                  >
+                                    <div id="datoSF46410">21.3837</div>
+                                  </td>
+                                  <td
+                                    width="87"
+                                    align="right"
+                                    class="renglonPar"
+                                  >
+                                    &nbsp;
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                          <tr class="renglonNon">
+                            <td
+                              align="left"
+                              style="padding-top: 5px; padding-bottom: 5px"
+                            >
+                              <div align="center">Yen Japon&eacute;s</div>
+                            </td>
+                            <td colspan="2">
+                              <table border="0" width="100%" cellspacing="0">
+                                <tr>
+                                  <td width="13px">
+                                    <img
+                                      width="10px"
+                                      height="10px"
+                                      class="avisoDivisas"
+                                      alt="Obteniendo datos..."
+                                      src="images/progress.gif"
+                                      style="display: none"
+                                    />
+                                  </td>
+                                  <td class="renglonNon" align="right">
+                                    <div id="datoSF46406">0.1331</div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td align="center"></td>
+                          </tr>
+                          <tr class="renglonPar">
+                            <td
+                              align="left"
+                              style="padding-top: 5px; padding-bottom: 5px"
+                            >
+                              <div align="center">D&oacute;lar Canadiense</div>
+                            </td>
+                            <td colspan="2">
+                              <table border="0" width="100%" cellspacing="0">
+                                <tr>
+                                  <td width="13px" class="renglonPar">
+                                    <img
+                                      width="10px"
+                                      height="10px"
+                                      class="avisoDivisas"
+                                      alt="Obteniendo datos..."
+                                      src="images/progress.gif"
+                                      style="display: none"
+                                    />
+                                  </td>
+                                  <td class="renglonPar" align="right">
+                                    <div id="datoSF60632">14.2613</div>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                            <td align="center"></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="b7"></td>
+                      <td class="b8"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td height="60">
+                  <table
+                    border="0"
+                    cellpadding="0"
+                    cellspacing="0"
+                    width="94%"
+                    class=""
+                  >
+                    <tr>
+                      <td width="5%" height="24" class="b4"></td>
+                      <td colspan="4" class="b4">
+                        <div align="center">
+                          <a
+                            href="#"
+                            class="liga"
+                            onClick="return abreLiga('otrasDivAction.do?idioma=sp');"
+                          >
+                            M&aacute;s informaci&oacute;n
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height="27" class="b4"></td>
+                      <td colspan="4" class="renglonPar">
+                        <table cellspacing="0" align="center">
+                          <tr>
+                            <td class="liga_tituloSF">
+                              <a
+                                href="/SieInternet/consultarDirectorioInternetAction.do?accion=consultarCuadroAnalitico&idCuadro=CA113&sector=6&locale=es"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="liga_tituloSF"
+                              >
+                                Otras cotizaciones (mensual)
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td height="8" colspan="2" class="b7"></td>
+                      <td width="13%" class="b8"></td>
+                      <td width="44%" colspan="2" class="b9"></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="97%" class="notasNotas">
+            <b>1/</b> El tipo de cambio (FIX) es determinado por el Banco de
+            M&eacute;xico con base en un promedio de cotizaciones del mercado de
+            cambios al mayoreo para operaciones liquidables el segundo
+            d&iacute;a h&aacute;bil bancario siguiente y que son obtenidas de
+            plataformas de transacci&oacute;n cambiaria y otros medios
+            electr&oacute;nicos con representatividad en el mercado de cambios.
+            El Banco de M&eacute;xico da a conocer el FIX a partir de las 12:00
+            horas de todos los d&iacute;as h&aacute;biles bancarios, se publica
+            en el Diario Oficial de la Federaci&oacute;n (DOF) un d&iacute;a
+            h&aacute;bil bancario despu&eacute;s de la fecha de
+            determinaci&oacute;n y es utilizado para solventar obligaciones
+            denominadas en d&oacute;lares liquidables en la Rep&uacute;blica
+            Mexicana al d&iacute;a siguiente de la publicaci&oacute;n en el DOF.
+            Para mayor informaci&oacute;n sobre este tipo de cambio consulte:
+            <a
+              class="liga"
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://www.banxico.org.mx/marco-normativo/normativa-emitida-por-el-banco-de-mexico/circular-3-2012/operaciones-instituciones-cre.html"
+              >El T&iacute;tulo Tercero, Cap&iacute;tulo V de la Circular 3/2012
+              del Banco de M&eacute;xico</a
+            >.
+          </td>
+          <td width="3%" class="notasNotas">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="notasNotas">&nbsp;</td>
+          <td class="notasNotas">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="notasNotas">
+            <b>2/</b> El Tipo de Cambio de Cierre de Jornada se determina como
+            el promedio ponderado de los tipos de cambio que ocurren en una
+            muestra aleatoria continua de tres minutos dentro de una ventana de
+            diez minutos, entre la 1:55 p.m. y las 2:05 p.m. de cada d�a h�bil
+            bancario. El Banco de M�xico da a conocer el Tipo de Cambio de
+            Cierre de Jornada a las 14:10 horas todos los d�as h�biles
+            bancarios. Fuente: Refinitiv FX Pricestream y Matching. Para mayor
+            informaci�n sobre este tipo de cambio consulte:
+            <a
+              class="liga"
+              target="_blank"
+              rel="noopener"
+              href="https://www.banxico.org.mx/apps/dao-web/4/60/DETERMINACION_DEL_TIPO_DE_CAMBIO_DE_CIERRE_DE_JORNADA.pdf"
+              >Nota Metodol�gica "DETERMINACI�N DEL TIPO DE CAMBIO DE CIERRE DE
+              JORNADA"</a
+            >.<br />
+          </td>
+          <td class="notasNotas">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="notasNotas">&nbsp;</td>
+          <td class="notasNotas">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="notasNotas">
+            <b>3/</b> Banco de M&eacute;xico da a conocer estos tipos de cambio
+            con fines estrictamente informativos y sin car&aacute;cter oficial.
+            Tipos de cambio cruzados con base en el tipo de cambio FIX publicado
+            por el Banco de M&eacute;xico y en los tipos de cambio promedio de
+            mercado para el euro y yen japon&eacute;s frente al d&oacute;lar que
+            da a conocer diariamente el Fondo Monetario Internacional (FMI). En
+            caso de que sea d&iacute;a inh&aacute;bil en los Estados Unidos y el
+            FMI no realice operaciones, los tipos de cambio promedio de mercado
+            se obtienen directamente de Reuters, que es la fuente original de
+            datos que utiliza el referido organismo financiero internacional. En
+            el caso del d&oacute;lar canadiense, el tipo de cambio publicado
+            corresponde al dado a conocer diariamente por el Banco de
+            Canad&aacute; en su sitio oficial. Fuente: FMI, Banco de
+            M&eacute;xico y Banco de Canad&aacute;.<br />
+          </td>
+          <td class="notasNotas">&nbsp;</td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

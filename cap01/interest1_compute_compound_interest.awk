@@ -1,5 +1,5 @@
 #	interest 1 - compute compound interest
-#	input:	amount rate years
+#	input:	amount, rate, years
 #	output: compounded value at the end of each year
 
 {
